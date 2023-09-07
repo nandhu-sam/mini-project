@@ -3,6 +3,9 @@ import glob
 
 # Nandhu: creates new rotated images and give names to them
 
+
+# newline
+
 images=glob.glob('Train/**/*.jpg', recursive=True)
 
 for image in images:
