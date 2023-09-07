@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- 
 
-# ------------------------------------ Imports ----------------------------------#
+# ------------------------------------ Imports ---------------------------------- #
 
 # Import python imaging libs
 import cv2
@@ -10,20 +10,22 @@ from PIL import ImageFont
 
 # Import operating system lib
 import os
+import sys
+
 import time
 
 # Import random generator
 from random import randint
 
-# ---------------------------------- Input and Output ---------------------------#
+# ---------------------------------- Input and Output --------------------------- #
 
 # Directory containing fonts
-font_dir = 'font-resources'  # TODO: READ THE PAPER FONT FONTS AND MAKE A FOLDER WITH IT
+font_dir = 'font-resources'  # be careful!
 
 # Output
 
 
-# ------------------------------------ Characters -------------------------------#
+# ------------------------------------ Characters ------------------------------- #
 
 # Numbers
 numbers = ['0', '1', '2']
@@ -40,13 +42,13 @@ test_sentence = ['S', 'i', 'n', 'g', 'a', 'p', 'o', 'r', 'i', 's', 'v', 'r', 'y'
                  'd', 's', 'a', 'f', 'e']
 
 # Select characters
-characters = input(
-    "Please Enter you sentence. I convert it into 32x32 jpg letters (example: This is a beautiful morning. Isn't it?):")
+characters = input("Please Enter you sentence. I convert it into 32x32 jpg letters"
+                   "(example: This is a beautiful morning. Isn't it?):")
 
 # ------------------------------------- Colors ----------------------------------#
 
 # Background color
-white_colors = (255)
+white_colors = 255
 black_colors = (0, 10, 20, 30)
 gray_colors = (135, 145, 155)
 
@@ -62,25 +64,29 @@ large_sizes = (32, 36, 40)
 
 font_size = int(input("Please input the desired font size [recommended range:14~28] (example: 20): "))
 font_index = int(input(
-    "--------------Font Map --------------\n[0]: Helvetica\n[1]: Baskerville\n[2]: Times New Roman\n[3]: Bodoni72\n[4]: Didot\n[5]: Futura\n[6]: Gill Sans\n[7]: Bembo\n[8]: Rockwell\n[9]: Franklin Gothic\n----------------------------\n What is your desired font index (example:2)? "))
+    "--------------Font Map --------------\n[0]: Helvetica\n[1]: Baskerville\n[2]: Times New Roman\n[3]: Bodoni72\n\
+    [4]: Didot\n[5]: Futura\n[6]: Gill Sans\n[7]: Bembo\n[8]: Rockwell\n[9]: Franklin Gothic\
+    \n----------------------------\n What is your desired font index (example:2)? "))
 rotation_value = int(input("How much rotation do you wish to add? [recommended range -15 ~ 15] (example: -5): "))
 rawsentence = ""
 for char in characters:
-    if (not (char.isalpha())):
+    if not (char.isalpha()):
         continue
-    if (char.isspace()):
+    if char.isspace():
         continue
     rawsentence = rawsentence + char
 
-out_dir = "outputsentences/" + rawsentence + "_fnt=" + str(font_index) + "_fntsz=" + str(font_size) + "_rotval=" + str(
-    rotation_value)
+out_dir = os.path.join("outputsentences",
+                       rawsentence + "_fnt=" + str(font_index) + "_fntsz=" + str(font_size) + "_rotval=" +
+                       str(rotation_value))
 try:
-    os.mkdir(out_dir)
-except OSError:
+    os.makedirs(out_dir)
+except OSError as e:
+    print(e, file=sys.stderr)
     pass
 else:
     pass
-out_dir = out_dir + "/"
+out_dir = out_dir + os.sep
 
 # Image size
 image_size = 32
@@ -88,7 +94,7 @@ image_size = 32
 
 # ------------------------------------ Cleanup ----------------------------------#
 
-def Cleanup():
+def cleanup():
     if os.path.isfile(font_dir + '.DS_Store'):
         os.unlink(font_dir + '.DS_Store')
     for file in os.listdir(out_dir):
@@ -99,19 +105,19 @@ def Cleanup():
 
 
 # ------------------------------ Generate Characters ----------------------------#
-def GenerateCharacters():
+def generateCharacters():
     k = 1
     for dirname, dirnames, filenames in os.walk(font_dir):
         for filename in filenames:
-            if (str(font_index).zfill(2) in filename):
+            if str(font_index).zfill(2) in filename:
                 font_resource_file = os.path.join(dirname, filename)
                 # For each character do
-                for char in characters:
-                    if not (char.isalpha()):
+                for c in characters:
+                    if not (c.isalpha()):
                         continue
-                    if char.isspace():
+                    if c.isspace():
                         continue
-                    character = str(char)
+                    character = str(c)
 
                     # Create character image :
                     # Grayscale, image size, background color
@@ -124,7 +130,7 @@ def GenerateCharacters():
                     font = ImageFont.truetype(font_resource_file, font_size)
 
                     # Get character width and height
-                    (font_width, font_height) = font.getsize(character)
+                    (font_width, font_height) = font.getbbox(character)[-2:]  # font.getsize(character)
 
                     # Calculate x position
                     x = (image_size - font_width) / 2
@@ -134,7 +140,7 @@ def GenerateCharacters():
 
                     # Draw text : Position, String,
                     # Options = Fill color, Font
-                    draw.text((x, y), character, (245 - background_color) + \
+                    draw.text((x, y), character, (245 - background_color) +
                               randint(0, 10), font=font)
 
                     # Final file name
@@ -165,7 +171,7 @@ def GenerateCharacters():
 # -------------------------------------- Main -----------------------------------#
 
 # Do cleanup
-# Cleanup()
+# cleanup()
 
 # Generate characters
-GenerateCharacters()
+generateCharacters()
