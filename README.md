@@ -1,2 +1,2 @@
 # Mini Project on ML
- Mini project files. ML and Image processing 
+ Mini project files. ML and Image processing.

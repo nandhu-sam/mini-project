@@ -38,10 +38,19 @@ medium_sizes = (20, 24, 28)
 large_sizes = (32, 36, 40)
 
 font_size = int(input("Please input the desired font size [recommended range:14~28] (example: 20): "))
-font_index = int(input(
-    "--------------Font Map --------------\n[0]: Helvetica\n[1]: Baskerville\n[2]: Times New Roman\n[3]: Bodoni72\n\
-    [4]: Didot\n[5]: Futura\n[6]: Gill Sans\n[7]: Bembo\n[8]: Rockwell\n[9]: Franklin Gothic\
-    \n----------------------------\n What is your desired font index (example:2)? "))
+font_index = int(input("--------------Font Map --------------\n"
+                       "[0]: Helvetica\n"
+                       "[1]: Baskerville\n"
+                       "[2]: Times New Roman\n"
+                       "[3]: Bodoni72\n"
+                       "[4]: Didot\n"
+                       "[5]: Futura\n"
+                       "[6]: Gill Sans\n"
+                       "[7]: Bembo\n"
+                       "[8]: Rockwell\n"
+                       "[9]: Franklin Gothic\n"
+                       "----------------------------\n"
+                       " What is your desired font index (example:2)? "))
 rotation_value = int(input("How much rotation do you wish to add? [recommended range -15 ~ 15] (example: -5): "))
 
 rawsentence = ''.join([c for c in characters if c.isalpha() and (not c.isspace())])
