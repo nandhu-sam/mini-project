@@ -68,13 +68,15 @@ font_index = int(input(
     [4]: Didot\n[5]: Futura\n[6]: Gill Sans\n[7]: Bembo\n[8]: Rockwell\n[9]: Franklin Gothic\
     \n----------------------------\n What is your desired font index (example:2)? "))
 rotation_value = int(input("How much rotation do you wish to add? [recommended range -15 ~ 15] (example: -5): "))
-rawsentence = ""
-for char in characters:
-    if not (char.isalpha()):
-        continue
-    if char.isspace():
-        continue
-    rawsentence = rawsentence + char
+
+rawsentence = ''.join([c for c in characters if c.isalpha() and (not c.isspace())])
+# rawsentence = ""
+# for char in characters:
+#     if not (char.isalpha()):
+#         continue
+#     if char.isspace():
+#         continue
+#     rawsentence = rawsentence + char
 
 out_dir = os.path.join("outputsentences",
                        rawsentence + "_fnt=" + str(font_index) + "_fntsz=" + str(font_size) + "_rotval=" +
@@ -95,8 +97,8 @@ image_size = 32
 # ------------------------------------ Cleanup ----------------------------------#
 
 def cleanup():
-    if os.path.isfile(font_dir + '.DS_Store'):
-        os.unlink(font_dir + '.DS_Store')
+    if os.path.isfile(os.path.join(font_dir, '.DS_Store')):
+        os.unlink(os.path.join(font_dir, '.DS_Store'))
     for file in os.listdir(out_dir):
         file_path = os.path.join(out_dir, file)
         if os.path.isfile(file_path):
