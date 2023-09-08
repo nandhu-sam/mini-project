@@ -2,11 +2,13 @@
 
 *.DS_Store/
 
+Letters/.DS_Store/
 Letters/AlphabetResults/
 Letters/Test/
 Letters/Validation/
 Letters/Train/
 
+Fonts/.DS_Store/
 Fonts/A/
 Fonts/a-s/
 Fonts/B/
