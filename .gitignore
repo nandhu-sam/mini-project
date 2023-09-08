@@ -1,5 +1,7 @@
 .idea/
 
+*.DS_Store
+
 Letters/AlphabetResults/
 Letters/Test/
 Letters/Validation/
