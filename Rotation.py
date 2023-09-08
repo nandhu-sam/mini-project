@@ -3,11 +3,6 @@ import glob
 
 import os
 
-# Nandhu: creates new rotated images and give names to them
-
-
-# newline
-
 images = glob.glob('Train/**/*.jpg', recursive=True)
 
 for image in images:
@@ -32,7 +27,7 @@ for image in images:
     rotated6 = cv2.warpAffine(img, M6, (cols, rows), borderValue=(255, 255, 255))
 
     filename = image
-    # filename = filename[0:-4]
+
     filename = os.path.splitext(filename)[0]
 
     cv2.imwrite(os.path.join(filename, "_R5.jpg"), rotated1)
@@ -41,12 +36,5 @@ for image in images:
     cv2.imwrite(os.path.join(filename, "_R-10.jpg"), rotated4)
     cv2.imwrite(os.path.join(filename, "_R15.jpg"), rotated5)
     cv2.imwrite(os.path.join(filename, "_R-15.jpg"), rotated6)
-
-    # cv2.imwrite(filename+"_R5.jpg",rotated1)
-    # cv2.imwrite(filename+"_R-5.jpg",rotated2)
-    # cv2.imwrite(filename+"_R10.jpg",rotated3)
-    # cv2.imwrite(filename+"_R-10.jpg",rotated4)
-    # cv2.imwrite(filename+"_R15.jpg",rotated5)
-    # cv2.imwrite(filename+"_R-15.jpg",rotated6)
 
 exit()
