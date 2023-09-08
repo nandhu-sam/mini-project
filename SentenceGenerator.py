@@ -56,6 +56,7 @@ except OSError as e:
     pass
 else:
     pass
+
 out_dir = out_dir + os.sep
 
 image_size = 32
