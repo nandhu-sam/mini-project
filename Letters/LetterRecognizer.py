@@ -1,6 +1,10 @@
 # Importing the Keras libraries and packages
-import numpy as np
+
+import os
 import glob
+
+import numpy as np
+
 from keras.preprocessing import image
 from keras.models import Sequential
 from keras.layers import Conv2D
@@ -40,7 +44,7 @@ train_datagen = ImageDataGenerator(rescale=1.0/255,
                                    zoom_range=0.2,
                                    horizontal_flip=True)
 
-test_datagen = ImageDataGenerator(rescale=1. / 255)
+test_datagen = ImageDataGenerator(rescale=1.0/255)
 
 bz = 32
 e = 500
@@ -49,12 +53,12 @@ vs = 140
 
 history = History()
 
-training_set = train_datagen.flow_from_directory('/Users/saeedeh/Desktop/Alphabet pics/Alphabets/Train/',
+training_set = train_datagen.flow_from_directory(os.path.join('Alphabet pics', 'Alphabets', 'Train') + os.sep,
                                                  target_size=(32, 32),
                                                  batch_size=32,
                                                  class_mode='categorical')
 
-test_set = test_datagen.flow_from_directory('/Users/saeedeh/Desktop/Alphabet pics/Alphabets/Validation/',
+test_set = test_datagen.flow_from_directory(os.path.join('Alphabet pics', 'Alphabets', 'Validation') + os.sep,
                                             target_size=(32, 32),
                                             batch_size=bz,
                                             class_mode='categorical')
@@ -67,12 +71,20 @@ classifier.fit_generator(training_set,
                          callbacks=[history])
 
 # saving the model 
-classifier.save('/Users/saeedeh/Desktop/Alphabet pics/Alphabets/AlphabetResults/Alphabet_bz=' + str(bz) + '_e=' + str(
-    e) + '_spe=' + str(spe) + '_vs=' + str(vs) + '.h5')
+classifier.save(os.path.join('Alphabet pics', 'Alphabets', 'AlphabetResults',
+                             'Alphabet_bz=' + str(bz) +
+                             '_e=' + str(e) +
+                             '_spe=' + str(spe) +
+                             '_vs=' + str(vs) + '.h5'))
+
 input("Press Enter to continue...")
 
-file1 = open('/Users/saeedeh/Desktop/Alphabet pics/Alphabets/AlphabetResults/Alphabet_bz=' + str(bz) + '_e=' + str(
-    e) + '_spe=' + str(spe) + '_vs=' + str(vs) + '.txt', "w")
+file1 = open(os.path.join('Alphabet pics', 'Alphabets', 'AlphabetResults',
+                          'Alphabet_bz=' + str(bz) +
+                          '_e=' + str(e) +
+                          '_spe=' + str(spe) +
+                          '_vs=' + str(vs) + '.txt'), "w")
+
 file1.write(str(history.history) + '\n')
 
 # plotting accuracy & loss in different epochs
@@ -86,14 +98,18 @@ plt.title("Training Loss and Accuracy on Dataset")
 plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="lower left")
-plt.savefig('/Users/saeedeh/Desktop/Alphabet pics/Alphabets/AlphabetResults/Alphabet_bz=' + str(bz) + '_e=' + str(
-    e) + '_spe=' + str(spe) + '_vs=' + str(vs) + '.png')
+plt.savefig(os.path.join('Alphabet pics', 'Alphabets', 'AlphabetResults',
+                         'Alphabet_bz=' + str(bz) +
+                         '_e=' + str(e) +
+                         '_spe=' + str(spe) +
+                         '_vs=' + str(vs) + '.png'))
 
 letters = ['A', 'a', 'B', 'b', 'Cc', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'Kk', 'L',
            'l', 'M', 'm', 'N', 'n', 'Oo', 'Pp', 'Q', 'q', 'R', 'r', 'Ss', 'T', 't', 'U', 'u', 'Vv', 'Ww', 'Xx', 'Y',
            'y', 'Zz']
 # Making predictions
-file_list = glob.glob('/Users/saeedeh/Desktop/Alphabet pics/Alphabets/Test/**/*.jpg', recursive=True)
+file_list = glob.glob(os.path.join('Alphabet pics', 'Alphabets', 'Test', '**', '*.jpg'), recursive=True)
+
 for testFile in file_list:
     test_image = image.load_img(testFile, target_size=(32, 32))
     test_image = image.img_to_array(test_image)
@@ -115,6 +131,3 @@ for testFile in file_list:
         file1.write('Not Recognized\n')
 
 file1.close()
-
-
-'Not Recognized'
