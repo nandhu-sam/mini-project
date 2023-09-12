@@ -17,6 +17,7 @@ def main():
         for i, num in enumerate([str(n).zfill(2) for n in range(10)]):
             if num in text:
                 shutil.copy(Image, outputdirs[i])
+                break
 
 
 if __name__ == '__main__':

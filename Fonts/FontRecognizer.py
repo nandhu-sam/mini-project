@@ -16,72 +16,22 @@ from PIL import ImageFont
 import os
 import gc
 
-Counter_Font_00 = 0
-Counter_Font_01 = 0
-Counter_Font_02 = 0
-Counter_Font_03 = 0
-Counter_Font_04 = 0
-Counter_Font_05 = 0
-Counter_Font_06 = 0
-Counter_Font_07 = 0
-Counter_Font_08 = 0
-Counter_Font_09 = 0
+counter_Fonts = [0] * 10
 
 
 def Font_prediction(char, fontResult):
-    global Counter_Font_00
-    global Counter_Font_01
-    global Counter_Font_02
-    global Counter_Font_03
-    global Counter_Font_04
-    global Counter_Font_05
-    global Counter_Font_06
-    global Counter_Font_07
-    global Counter_Font_08
-    global Counter_Font_09
-    if fontResult[0][0] == 1:
-        Counter_Font_00 = Counter_Font_00 + 1
-        print('Char ' + char + ', Font 00')
-    elif fontResult[0][1] == 1:
-        Counter_Font_01 = Counter_Font_01 + 1
-        print('Char ' + char + ', Font 01')
-    elif fontResult[0][2] == 1:
-        Counter_Font_02 = Counter_Font_02 + 1
-        print('Char ' + char + ', Font 02')
-    elif fontResult[0][3] == 1:
-        Counter_Font_03 = Counter_Font_03 + 1
-        print('Char ' + char + ', Font 03')
-    elif fontResult[0][4] == 1:
-        Counter_Font_04 = Counter_Font_04 + 1
-        print('Char ' + char + ', Font 04')
-    elif fontResult[0][5] == 1:
-        Counter_Font_05 = Counter_Font_05 + 1
-        print('Char ' + char + ', Font 05')
-    elif fontResult[0][6] == 1:
-        Counter_Font_06 = Counter_Font_06 + 1
-        print('Char ' + char + ', Font 06')
-    elif fontResult[0][7] == 1:
-        Counter_Font_07 = Counter_Font_07 + 1
-        print('Char ' + char + ', Font 07')
-    elif fontResult[0][8] == 1:
-        Counter_Font_08 = Counter_Font_08 + 1
-        print('Char ' + char + ', Font 08')
-    elif fontResult[0][9] == 1:
-        Counter_Font_09 = Counter_Font_09 + 1
-        print('Char' + char + ', Font 09')
+    global counter_Fonts
+
+    for k in range(10):
+        if fontResult[0][k] == 1:
+            Counter_Fonts[k] = Counter_Fonts[k] + 1
+            print('Char ' + char + ', Font ' + str(k).zfill(2))
+            break
 
 
 def main():
-    global Counter_Font_00
-    global Counter_Font_01
-    global Counter_Font_02
-    global Counter_Font_03
-    global Counter_Font_04
-    global Counter_Font_05
-    global Counter_Font_06
-    global Counter_Font_07
-    global Counter_Font_08
-    global Counter_Font_09
+    global counter_Fonts
+
     print("Loading (1/44), Please wait... ")
     Char_Model = load_model(
         '/Users/saeedeh/Desktop/Alphabet pics/Alphabets/AlphabetResults/Good_Alphabet_bz=32_e=500_spe=700_vs=140.h5')
