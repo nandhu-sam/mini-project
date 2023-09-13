@@ -1,7 +1,7 @@
 # Importing the Keras libraries and packages
 
-import os
 import glob
+import os
 
 import numpy as np
 
@@ -39,12 +39,12 @@ classifier.add(Dense(units=43, activation='softmax'))
 classifier.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Fitting the CNN to the images
-train_datagen = ImageDataGenerator(rescale=1.0/255,
+train_datagen = ImageDataGenerator(rescale=1.0 / 255,
                                    shear_range=0.2,
                                    zoom_range=0.2,
                                    horizontal_flip=True)
 
-test_datagen = ImageDataGenerator(rescale=1.0/255)
+test_datagen = ImageDataGenerator(rescale=1.0 / 255)
 
 bz = 32
 e = 500
@@ -53,13 +53,14 @@ vs = 140
 
 history = History()
 
-
-training_set = train_datagen.flow_from_directory(os.path.join('..', 'Alphabet pics', 'Alphabets', 'Train') + os.sep,
+# Original path used to be os.path.join('..', 'Alphabet pics', 'Alphabets', 'Train') + os.sep,
+training_set = train_datagen.flow_from_directory(os.path.join('Train') + os.sep,
                                                  target_size=(32, 32),
                                                  batch_size=32,
                                                  class_mode='categorical')
 
-test_set = test_datagen.flow_from_directory(os.path.join('..', 'Alphabet', 'Alphabets', 'Validation') + os.sep,
+# Original path used to be os.path.join('..', 'Alphabet', 'Alphabets', 'Validation') + os.sep,
+test_set = test_datagen.flow_from_directory(os.path.join('Validation') + os.sep,
                                             target_size=(32, 32),
                                             batch_size=bz,
                                             class_mode='categorical')
@@ -73,7 +74,9 @@ classifier.fit_generator(training_set,
                          callbacks=[history])
 
 # saving the model
-classifier.save(os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults',
+# Original path used to be os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults', ...
+
+classifier.save(os.path.join('AlphabetResults',
                              'Alphabet_bz=' + str(bz) +
                              '_e=' + str(e) +
                              '_spe=' + str(spe) +
@@ -81,7 +84,9 @@ classifier.save(os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResult
 
 input("Press Enter to continue...")
 
-file1 = open(os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults',
+# Original path used to be os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults', ...
+
+file1 = open(os.path.join('AlphabetResults',
                           'Alphabet_bz=' + str(bz) +
                           '_e=' + str(e) +
                           '_spe=' + str(spe) +
@@ -101,7 +106,8 @@ plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="lower left")
 
-plt.savefig(os.path.join('..', 'Alphabet', 'Alphabets', 'AlphabetResults',
+# Original path used to be os.path.join('..', 'Alphabet', 'Alphabets', 'AlphabetResults', ...
+plt.savefig(os.path.join('AlphabetResults',
                          'Alphabet_bz=' + str(bz) +
                          '_e=' + str(e) +
                          '_spe=' + str(spe) +
@@ -111,7 +117,8 @@ letters = ['A', 'a', 'B', 'b', 'Cc', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H'
            'l', 'M', 'm', 'N', 'n', 'Oo', 'Pp', 'Q', 'q', 'R', 'r', 'Ss', 'T', 't', 'U', 'u', 'Vv', 'Ww', 'Xx', 'Y',
            'y', 'Zz']
 # Making predictions
-file_list = glob.glob(os.path.join('..', 'Alphabet', 'Alphabets', 'Test', '**', '*.jpg'), recursive=True)
+# Original path used to be os.path.join('..', 'Alphabet', 'Alphabets', 'Test', '**', '*.jpg')
+file_list = glob.glob(os.path.join('Test', '**', '*.jpg'), recursive=True)
 
 for testFile in file_list:
     test_image = image.load_img(testFile, target_size=(32, 32))
@@ -125,7 +132,7 @@ for testFile in file_list:
     for c in range(len(letters)):
         if result[0][c] == 1:
             print(letters[c])
-            file1.write(letters[c]+'\n')
+            file1.write(letters[c] + '\n')
             rec = True
             break
 
