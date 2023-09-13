@@ -54,16 +54,17 @@ vs = 140
 history = History()
 
 
-training_set = train_datagen.flow_from_directory(os.path.join('Alphabet pics', 'Alphabets', 'Train') + os.sep,
+training_set = train_datagen.flow_from_directory(os.path.join('..', 'Alphabet pics', 'Alphabets', 'Train') + os.sep,
                                                  target_size=(32, 32),
                                                  batch_size=32,
                                                  class_mode='categorical')
 
-test_set = test_datagen.flow_from_directory(os.path.join('Alphabet pics', 'Alphabets', 'Validation') + os.sep,
+test_set = test_datagen.flow_from_directory(os.path.join('..', 'Alphabet', 'Alphabets', 'Validation') + os.sep,
                                             target_size=(32, 32),
                                             batch_size=bz,
                                             class_mode='categorical')
 
+# TODO: fit_generator is deprecated, while fit works fine with generators as well.
 classifier.fit_generator(training_set,
                          steps_per_epoch=spe,
                          epochs=e,
@@ -72,7 +73,7 @@ classifier.fit_generator(training_set,
                          callbacks=[history])
 
 # saving the model
-classifier.save(os.path.join('Alphabet pics', 'Alphabets', 'AlphabetResults',
+classifier.save(os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults',
                              'Alphabet_bz=' + str(bz) +
                              '_e=' + str(e) +
                              '_spe=' + str(spe) +
@@ -80,7 +81,7 @@ classifier.save(os.path.join('Alphabet pics', 'Alphabets', 'AlphabetResults',
 
 input("Press Enter to continue...")
 
-file1 = open(os.path.join('Alphabet pics', 'Alphabets', 'AlphabetResults',
+file1 = open(os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults',
                           'Alphabet_bz=' + str(bz) +
                           '_e=' + str(e) +
                           '_spe=' + str(spe) +
@@ -100,7 +101,7 @@ plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="lower left")
 
-plt.savefig(os.path.join('Alphabet pics', 'Alphabets', 'AlphabetResults',
+plt.savefig(os.path.join('..', 'Alphabet', 'Alphabets', 'AlphabetResults',
                          'Alphabet_bz=' + str(bz) +
                          '_e=' + str(e) +
                          '_spe=' + str(spe) +
@@ -110,7 +111,7 @@ letters = ['A', 'a', 'B', 'b', 'Cc', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H'
            'l', 'M', 'm', 'N', 'n', 'Oo', 'Pp', 'Q', 'q', 'R', 'r', 'Ss', 'T', 't', 'U', 'u', 'Vv', 'Ww', 'Xx', 'Y',
            'y', 'Zz']
 # Making predictions
-file_list = glob.glob(os.path.join('Alphabet pics', 'Alphabets', 'Test', '**', '*.jpg'), recursive=True)
+file_list = glob.glob(os.path.join('..', 'Alphabet', 'Alphabets', 'Test', '**', '*.jpg'), recursive=True)
 
 for testFile in file_list:
     test_image = image.load_img(testFile, target_size=(32, 32))
