@@ -1,9 +1,12 @@
 # Importing the Keras libraries and packages
+import os
+
 import numpy as np
 import glob
 import gc
 from keras.preprocessing import image
 from keras.models import Sequential
+from keras.models import save_model
 from keras.layers import Conv2D
 from keras.layers import MaxPooling2D
 from keras.layers import Flatten
@@ -38,31 +41,35 @@ def ClassifyFont(neurons, letter, bz, e, spe, vs):
     classifier.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
     # Fitting the CNN to the images
-    train_datagen = ImageDataGenerator(rescale=1.0/255,
+    train_datagen = ImageDataGenerator(rescale=1.0 / 255,
                                        shear_range=0.2,
                                        zoom_range=0.2,
                                        horizontal_flip=True)
 
-    test_datagen = ImageDataGenerator(rescale=1.0/255)
+    test_datagen = ImageDataGenerator(rescale=1.0 / 255)
 
     history = History()
-    training_set = train_datagen.flow_from_directory(os.path.join('Fonts', letter, 'Train') + os.sep,
+    # original pathname: os.path.join('Fonts', letter, 'Train') + os.sep
+    print("training set loading...")
+    training_set = train_datagen.flow_from_directory(os.path.join(letter, 'Train') + os.sep,
                                                      target_size=(32, 32),
                                                      batch_size=bz,
                                                      class_mode='categorical')
 
-    test_set = test_datagen.flow_from_directory(os.path.join('Fonts', letter, 'Validation') + os.sep,
+    print("test set loading...")
+    test_set = test_datagen.flow_from_directory(os.path.join(letter, 'Validation') + os.sep,
                                                 target_size=(32, 32),
                                                 batch_size=bz,
                                                 class_mode='categorical')
 
-    classifier.fit_generator(training_set,
-                             steps_per_epoch=spe,
-                             epochs=e,
-                             validation_data=test_set,
-                             validation_steps=vs,
-                             shuffle=True,
-                             callbacks=[history])
+    print("classifier fitting...")
+    classifier.fit(training_set,
+                   steps_per_epoch=spe,
+                   epochs=e,
+                   validation_data=test_set,
+                   validation_steps=vs,
+                   shuffle=True,
+                   callbacks=[history])
 
     # saving the model
 
@@ -72,30 +79,32 @@ def ClassifyFont(neurons, letter, bz, e, spe, vs):
                       '_spe=' + str(spe) +
                       '_vs=' + str(vs))
 
-    classifier.save(os.path.join('Fonts', letter, 'Results', letter + clf_params_str + '.h5'))
-    file1 = open(os.path.join('Fonts', letter, 'Results', letter + clf_params_str + '.h5'), "w")
+    save_model(classifier, os.path.join(letter, 'Results', letter + clf_params_str + '.h5'), save_format='h5')
+    file1 = open(os.path.join(letter, 'Results', letter + clf_params_str + '.h5'), "w")
     file1.write(str(history.history) + '\n')
 
     # Accuracy & loss in different epochs
     plt.style.use("ggplot")
     plt.figure()
-    plt.plot(np.arange(0, e), history.history["loss"], label="train_loss")
-    plt.plot(np.arange(0, e), history.history["val_loss"], label="val_loss")
-    plt.plot(np.arange(0, e), history.history["accuracy"], label="train_acc")
-    plt.plot(np.arange(0, e), history.history["val_accuracy"], label="val_acc")
+    l_loss, l_val_loss, l_acc, l_val_acc = [len(history.history[k])
+                                            for k in ["loss", "val_loss", "accuracy", "val_accuracy"]]
+    plt.plot(np.arange(0, l_loss),     history.history["loss"], label="train_loss")
+    plt.plot(np.arange(0, l_val_loss), history.history["val_loss"], label="val_loss")
+    plt.plot(np.arange(0, l_acc),      history.history["accuracy"], label="train_acc")
+    plt.plot(np.arange(0, l_val_acc),  history.history["val_accuracy"], label="val_acc")
     plt.title("Training Loss and Accuracy on Dataset")
     plt.xlabel("Epoch #")
     plt.ylabel("Loss/Accuracy")
     plt.legend(loc="lower left")
-    plt.savefig(os.path.join('Fonts', letter, 'Results', letter + clf_params_str + '.png'))
+    plt.savefig(os.path.join(letter, 'Results', letter + clf_params_str + '.png'))
 
     # Making predictions
 
-    file_list = glob.glob(os.path.join('Fonts', letter, 'Test', '**', '*.jpg'), recursive=True)
+    file_list = glob.glob(os.path.join(letter, 'Test', '**', '*.jpg'), recursive=True)
 
     for testFile in file_list:
         test_image = image.load_img(testFile, target_size=(32, 32))
-        test_image = image.img_to_array(test_image)
+        test_image = image.img_to_array(test_image, dtype=np.uint)
         test_image = np.expand_dims(test_image, axis=0)
         result = classifier.predict(test_image)
         print(testFile[50:62], end=" : ")
@@ -129,7 +138,8 @@ def main():
     for alphabet in Alphabets:
         for Neurons in DifferentNeurons:
             for epochs in DifferentEpochs:
-                ClassifyFont(Neurons, alphabet, 32, epochs, 70, 14)
+                print("testing alphabet:", alphabet)
+                ClassifyFont(Neurons, alphabet, 32, epochs, 20, 14)
                 gc.collect()
 
 

@@ -65,13 +65,12 @@ test_set = test_datagen.flow_from_directory(os.path.join('Validation') + os.sep,
                                             batch_size=bz,
                                             class_mode='categorical')
 
-# TODO: fit_generator is deprecated, while fit works fine with generators as well.
-classifier.fit_generator(training_set,
-                         steps_per_epoch=spe,
-                         epochs=e,
-                         validation_data=test_set,
-                         validation_steps=vs,
-                         callbacks=[history])
+classifier.fit(training_set,
+               steps_per_epoch=spe,
+               epochs=e,
+               validation_data=test_set,
+               validation_steps=vs,
+               callbacks=[history])
 
 # saving the model
 # Original path used to be os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults', ...
