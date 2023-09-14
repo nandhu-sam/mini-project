@@ -75,22 +75,19 @@ classifier.fit_generator(training_set,
 
 # saving the model
 # Original path used to be os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults', ...
+clf_param_str = ('Alphabet_bz=' + str(bz) +
+                 '_e=' + str(e) +
+                 '_spe=' + str(spe) +
+                 '_vs=' + str(vs))
 
-classifier.save(os.path.join('AlphabetResults',
-                             'Alphabet_bz=' + str(bz) +
-                             '_e=' + str(e) +
-                             '_spe=' + str(spe) +
-                             '_vs=' + str(vs) + '.h5'))
+classifier.save(os.path.join('AlphabetResults', clf_param_str + '.h5'))
 
 input("Press Enter to continue...")
 
 # Original path used to be os.path.join('..', 'Alphabet pics', 'Alphabets', 'AlphabetResults', ...
 
-file1 = open(os.path.join('AlphabetResults',
-                          'Alphabet_bz=' + str(bz) +
-                          '_e=' + str(e) +
-                          '_spe=' + str(spe) +
-                          '_vs=' + str(vs) + '.txt'), "w")
+
+file1 = open(os.path.join('AlphabetResults', clf_param_str + '.txt'), "w")
 
 file1.write(str(history.history) + '\n')
 
@@ -99,19 +96,15 @@ plt.style.use("ggplot")
 plt.figure()
 plt.plot(np.arange(0, e), history.history["loss"], label="train_loss")
 plt.plot(np.arange(0, e), history.history["val_loss"], label="val_loss")
-plt.plot(np.arange(0, e), history.history["acc"], label="train_acc")
-plt.plot(np.arange(0, e), history.history["val_acc"], label="val_acc")
+plt.plot(np.arange(0, e), history.history["accuracy"], label="train_acc")  # check history.history.keys()
+plt.plot(np.arange(0, e), history.history["val_accuracy"], label="val_acc")
 plt.title("Training Loss and Accuracy on Dataset")
 plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="lower left")
 
 # Original path used to be os.path.join('..', 'Alphabet', 'Alphabets', 'AlphabetResults', ...
-plt.savefig(os.path.join('AlphabetResults',
-                         'Alphabet_bz=' + str(bz) +
-                         '_e=' + str(e) +
-                         '_spe=' + str(spe) +
-                         '_vs=' + str(vs) + '.png'))
+plt.savefig(os.path.join('AlphabetResults', clf_param_str + '.png'))
 
 letters = ['A', 'a', 'B', 'b', 'Cc', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'Kk', 'L',
            'l', 'M', 'm', 'N', 'n', 'Oo', 'Pp', 'Q', 'q', 'R', 'r', 'Ss', 'T', 't', 'U', 'u', 'Vv', 'Ww', 'Xx', 'Y',
