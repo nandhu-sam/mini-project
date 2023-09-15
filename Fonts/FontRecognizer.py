@@ -5,6 +5,10 @@ Created on Sat Apr 13 14:29:41 2019
 
 @author: saeedeh
 """
+
+import os
+import sys
+
 from keras.models import load_model
 import glob
 import numpy as np
@@ -13,7 +17,7 @@ import cv2
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-import os
+
 import gc
 
 counter_Fonts = [0] * 10
@@ -24,7 +28,7 @@ def Font_prediction(char, fontResult):
 
     for k in range(10):
         if fontResult[0][k] == 1:
-            Counter_Fonts[k] = Counter_Fonts[k] + 1
+            counter_Fonts[k] = counter_Fonts[k] + 1
             print('Char ' + char + ', Font ' + str(k).zfill(2))
             break
 
